@@ -1,0 +1,2 @@
+# 各子项目的 Cargo 构建产物（Cargo.lock 为 bin 项目锁定依赖版本，按官方建议提交）
+/*/target/
