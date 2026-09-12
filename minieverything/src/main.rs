@@ -1,4 +1,4 @@
-//! mini-everything：Everything 的简单 CLI 版。
+//! minieverything：Everything 的简单 CLI 版。
 //! 首次全量遍历建索引，之后通过 NTFS USN Journal 增量补差，实现秒级文件名搜索。
 
 mod index;
@@ -13,12 +13,12 @@ use std::time::Instant;
 
 #[derive(Parser)]
 #[command(
-    name = "mini-everything",
+    name = "minieverything",
     version,
     about = "Everything 的简单 CLI 版：NTFS 全盘文件名索引与秒级搜索"
 )]
 struct Cli {
-    /// 搜索模式（无子命令时直接搜索，如 mini-everything cargo.toml）
+    /// 搜索模式（无子命令时直接搜索，如 minieverything cargo.toml）
     pattern: Option<String>,
 
     /// 最多显示条数，0 表示不限
@@ -200,7 +200,7 @@ fn cmd_status() -> anyhow::Result<()> {
     match Index::load()? {
         None => {
             println!("索引不存在：{path:?}");
-            println!("请先运行：mini-everything update");
+            println!("请先运行：minieverything update");
         }
         Some(idx) => {
             let (files, dirs) = idx.stats();
@@ -235,7 +235,7 @@ fn cmd_search(cli: Cli) -> anyhow::Result<()> {
         Some(p) => p.clone(),
         None => {
             // 无参数无子命令：打印帮助
-            let _ = Cli::parse_from(["mini-everything", "--help"]);
+            let _ = Cli::parse_from(["minieverything", "--help"]);
             return Ok(());
         }
     };
@@ -244,7 +244,7 @@ fn cmd_search(cli: Cli) -> anyhow::Result<()> {
     let mut idx = match Index::load()? {
         Some(i) => i,
         None => {
-            eprintln!("索引不存在，请先运行：mini-everything update");
+            eprintln!("索引不存在，请先运行：minieverything update");
             std::process::exit(2);
         }
     };

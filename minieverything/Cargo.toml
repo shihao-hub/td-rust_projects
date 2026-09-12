@@ -1,5 +1,5 @@
 [package]
-name = "mini-everything"
+name = "minieverything"
 version = "0.1.0"
 edition = "2021"
 description = "Everything 的简单 CLI 版：NTFS 全盘文件名索引与秒级搜索"

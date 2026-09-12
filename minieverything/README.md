@@ -1,10 +1,10 @@
-# mini-everything
+# minieverything
 
 [Everything](https://www.voidtools.com/zh-cn/)（voidtools）的简单 CLI 版：NTFS 全盘文件名索引 + 秒级搜索，Rust 实现。
 
 ## 工作原理
 
-- **全量建索引**：并行遍历所有固定磁盘 NTFS 卷（约 220 万条 / 20~45s），同时为每个目录采集 64 位 MFT 引用号（file reference number），索引以 bincode 二进制持久化到 `%LOCALAPPDATA%\mini-everything\index.bin`。
+- **全量建索引**：并行遍历所有固定磁盘 NTFS 卷（约 220 万条 / 20~45s），同时为每个目录采集 64 位 MFT 引用号（file reference number），索引以 bincode 二进制持久化到 `%LOCALAPPDATA%\minieverything\index.bin`。
 - **增量更新**：通过 NTFS **USN Journal**（变更日志）从上次游标位置补差，把 CREATE / DELETE / RENAME 记录应用到索引。目录改名时整棵子树路径自动前缀重写。
 - **搜索**：内存子串匹配，220 万条约 300~400ms；支持通配符（模式含 `*` `?` 时自动启用）与正则（`-r`）。
 
@@ -14,30 +14,30 @@
 
 ```powershell
 # 首次建索引（建议管理员身份，可同时启用 USN 游标）
-mini-everything update
+minieverything update
 
 # 直接搜索（默认搜索前自动做 USN 增量刷新）
-mini-everything cargo.toml
+minieverything cargo.toml
 
 # 常用选项
-mini-everything "s*.rs"              # 通配符
-mini-everything "^ma" -r             # 正则
-mini-everything src -t dir           # 只搜目录
-mini-everything mini -l 20           # 限制条数（默认 100，0 = 不限）
-mini-everything log --full-path      # 匹配完整路径而非文件名
-mini-everything LOG -c               # 区分大小写
-mini-everything foo --no-update      # 跳过增量刷新，纯离线查询
+minieverything "s*.rs"              # 通配符
+minieverything "^ma" -r             # 正则
+minieverything src -t dir           # 只搜目录
+minieverything mini -l 20           # 限制条数（默认 100，0 = 不限）
+minieverything log --full-path      # 匹配完整路径而非文件名
+minieverything LOG -c               # 区分大小写
+minieverything foo --no-update      # 跳过增量刷新，纯离线查询
 
 # 索引管理
-mini-everything update --rebuild     # 强制全量重建
-mini-everything status               # 查看索引状态与各卷 USN 游标
+minieverything update --rebuild     # 强制全量重建
+minieverything status               # 查看索引状态与各卷 USN 游标
 ```
 
 ## 构建
 
 ```powershell
 cargo build --release
-# 产物：target\release\mini-everything.exe
+# 产物：target\release\minieverything.exe
 ```
 
 ## 已知限制（一期范围）
