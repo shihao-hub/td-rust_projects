@@ -4,7 +4,7 @@
 
 ## 工作原理
 
-- **全量建索引**：并行遍历所有固定磁盘 NTFS 卷（约 220 万条 / 20~45s），同时为每个目录采集 64 位 MFT 引用号（file reference number），索引以 bincode 二进制持久化到 `%LOCALAPPDATA%\minieverything\index.bin`。
+- **全量建索引**：并行遍历所有固定磁盘 NTFS 卷（约 220 万条 / 20~45s），同时为每个目录采集 64 位 MFT 引用号（file reference number），索引以 bincode 二进制持久化到 `%APPDATA%\language_projects\minieverything\index.bin`（取不到 APPDATA 回退 `~/.language_projects/minieverything/`）。
 - **增量更新**：通过 NTFS **USN Journal**（变更日志）从上次游标位置补差，把 CREATE / DELETE / RENAME 记录应用到索引。目录改名时整棵子树路径自动前缀重写。
 - **搜索**：内存子串匹配，220 万条约 300~400ms；支持通配符（模式含 `*` `?` 时自动启用）与正则（`-r`）。
 

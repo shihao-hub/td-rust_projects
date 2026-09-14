@@ -83,12 +83,16 @@ impl PathIndex {
 }
 
 impl Index {
-    /// 索引文件路径：%LOCALAPPDATA%\minieverything\index.bin
+    /// 索引文件路径：%APPDATA%\language_projects\minieverything\index.bin
+    /// （取不到 APPDATA 回退 %USERPROFILE%\.language_projects\minieverything\）
     pub fn index_file() -> anyhow::Result<PathBuf> {
-        let base = std::env::var("LOCALAPPDATA")
-            .or_else(|_| std::env::var("USERPROFILE"))
+        let dir = std::env::var("APPDATA")
+            .map(|base| PathBuf::from(base).join("language_projects"))
+            .or_else(|_| {
+                std::env::var("USERPROFILE").map(|p| PathBuf::from(p).join(".language_projects"))
+            })
             .map_err(|_| anyhow::anyhow!("无法定位用户目录"))?;
-        Ok(PathBuf::from(base).join("minieverything").join("index.bin"))
+        Ok(dir.join("minieverything").join("index.bin"))
     }
 
     /// 从磁盘加载索引；不存在返回 None
