@@ -10,3 +10,6 @@ Release/
 
 # rustfmt 备份文件
 **/*.rs.bk
+
+# Windows 下 `>nul` 重定向误生成的占位文件
+nul
